@@ -35,6 +35,6 @@ module.exports = {
     'operator-linebreak': 0,
     'import/prefer-default-export': 0,
     'no-console': 0,
-    'arrow-body-style': 1,
+    'arrow-body-style': 0,
   },
 };

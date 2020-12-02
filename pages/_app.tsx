@@ -1,7 +1,9 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import '../styles/globals.css';
+import 'normalize.css';
+import '../styles/globals.scss';
 import store from '../store';
+import SiteLayout from '../components/layout/site-layout';
 
 interface IProps {
   Component: React.ComponentType,
@@ -10,7 +12,9 @@ interface IProps {
 
 const App: React.FC<IProps> = ({ Component, pageProps }) => (
   <Provider store={store}>
-    <Component {...pageProps} />
+    <SiteLayout>
+      <Component {...pageProps} />
+    </SiteLayout>
   </Provider>
 );
 

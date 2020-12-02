@@ -1,0 +1,31 @@
+@use '../../styles/variables.scss' as vs;
+@use '../../styles/mixin.scss' as mi;
+
+.header {
+  line-height: 44px;
+  text-align: center;
+  position: relative;
+  color: vs.$color-theme;
+  font-size: vs.$font-size-large;
+  .header-title {
+    position: relative;
+    display: inline-block;
+    font-weight: bold;
+  }
+  .header-appicon {
+    position: absolute;
+    left: -40px;
+    top: 5px;
+    width: 30px;
+    height: 32px;
+    background-size: 30px 32px;
+    @include mi.bg-image('logo');
+  }
+  .header-usericon {
+    line-height: 0;
+    position: absolute;
+    top: 12px;
+    right: 20px;
+    font-size: 20px;
+  }
+}
