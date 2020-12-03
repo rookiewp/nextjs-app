@@ -1,14 +1,13 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import { IState } from '../store/reducer';
+import React, { useEffect } from 'react';
+import { useRouter } from 'next/router';
 
-const Home: React.FC<Record<string, unknown>> = (props) => {
-  return (
-    <div className="wp">home</div>
-  );
+const Home: React.FC = () => {
+  const router = useRouter();
+  useEffect(() => {
+    router.push('/recommend');
+  }, []);
+
+  return null;
 };
-const mapStateToProps = (state: IState) => ({
-  name: state.name,
-});
 
-export default connect(mapStateToProps)(Home);
+export default Home;

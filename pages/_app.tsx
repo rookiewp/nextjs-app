@@ -1,21 +1,24 @@
 import React from 'react';
-import { Provider } from 'react-redux';
+import { Store } from 'redux';
 import 'normalize.css';
 import '../styles/globals.scss';
-import store from '../store';
+import { wrapper } from '../store';
 import SiteLayout from '../components/layout/site-layout';
 
 interface IProps {
-  Component: React.ComponentType,
-  pageProps: Record<string, unknown>,
+  Component: React.ComponentType;
+  pageProps: Record<string, unknown>;
+  store: Store;
 }
 
-const App: React.FC<IProps> = ({ Component, pageProps }) => (
-  <Provider store={store}>
+const App: React.FC<IProps> = ({ Component, pageProps }) => {
+  return (
+    // <Provider store={pageProps.store}>
     <SiteLayout>
       <Component {...pageProps} />
     </SiteLayout>
-  </Provider>
-);
+    // </Provider>
+  );
+};
 
-export default App;
+export default wrapper.withRedux(App);

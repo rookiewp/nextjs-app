@@ -1,7 +1,8 @@
 import { createStore, applyMiddleware } from 'redux';
+import { MakeStore, createWrapper } from 'next-redux-wrapper';
 import thunk from 'redux-thunk';
-import reducer from './reducer';
+import reducer, { IState } from './reducer';
 
-const store = createStore(reducer, applyMiddleware(thunk));
+const makeStore: MakeStore<IState> = () => createStore(reducer, applyMiddleware(thunk));
 
-export default store;
+export const wrapper = createWrapper<IState>(makeStore);

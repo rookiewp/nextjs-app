@@ -1,3 +1,5 @@
+import { AnyAction } from 'redux';
+import { HYDRATE } from 'next-redux-wrapper';
 import * as types from './action-types';
 import { AnyObj } from '../types';
 
@@ -17,13 +19,8 @@ export interface IState {
   // favoriteList: loadFavorite()
 }
 
-interface IAction {
-  type: string,
-  [propName: string]: any,
-}
-
 interface IReducer {
-  (state: IState, action: IAction): IState;
+  (state: IState, action: AnyAction): IState;
 }
 
 const defaultState: IState = {
@@ -41,6 +38,10 @@ const defaultState: IState = {
 
 const reducer: IReducer = (state = defaultState, action) => {
   switch (action.type) {
+    case HYDRATE:
+      return { ...state, ...action.payload };
+    case 'NAME':
+      return { ...state, ...{ name: action.name } };
     case types.SET_SINGER:
       return { ...state, ...{ singer: action.singer } };
     case types.SET_PLAYING_STATE:

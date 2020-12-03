@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import classnames from 'classnames';
 import styles from './nav.module.scss';
@@ -24,22 +24,23 @@ const navList = [
 
 const Nav: React.FC = () => {
   const router = useRouter();
-  console.log(router)
+  const [navIndex, setIndex] = useState<number>(0);
 
   return (
     <div className={styles.nav}>
       {
-        navList.map(item => (
+        navList.map((item, i) => (
           <div
             className={styles['nav-item']}
             key={item.title}
             onClick={() => {
+              setIndex(i);
               router.push(item.url);
             }}
           >
             <span
               className={classnames(styles['nav-text'], {
-                [styles['nav-active']]: router.pathname === item.url,
+                [styles['nav-active']]: i === navIndex,
               })}
             >
               {item.title}
