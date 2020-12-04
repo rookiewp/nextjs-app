@@ -1,54 +1,106 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { getRecommendApi } from './api';
+import { useRouter } from 'next/router';
+import { getSliderListApi, getSongListApi } from './api';
 import { IState } from '../../store/reducer';
 import { wrapper } from '../../store/index';
+import styles from './recommend.module.scss';
+import Swipe from '../../components/swipe';
 
-type Slider = {id: number, linkUrl: string, picUrl: string}[];
-interface IRecommedRes {
+type SliderList = {id: number, linkUrl: string, picUrl: string}[];
+type SongList = {
+  commit_time: string, createtime: string, dissid: string,
+  dissname: string, imgurl: string, introduction: string,
+  listennum: number, score: number, version: number,
+  creator: {
+    avatarUrl: string, encrypt_uin: string, followflag: number,
+    isVip: number, name: string, qq: number, type: number,
+  }
+}[];
+interface ISliderListRes {
   code: number;
   data: {
     radioList: {Ftitle: string, picUrl: string, radioid: number}[],
-    slider: Slider,
+    slider: SliderList,
     songList: Record<string, unknown>[]
   }
 }
-
-interface IProps {
-  slider: Slider;
-  name: string;
-  changeName: () => void;
+interface ISongListRes {
+  code: number;
+  data: {
+    categoryId: number,
+    ein: number,
+    sin: number,
+    sortId: number,
+    sum: number,
+    uin: number,
+    list: SongList,
+  },
+  default: number,
+  message: string,
+  subcode: number,
 }
 
-const Recommed: React.FC<IProps> = ({ slider, name }) => {
+interface IProps {
+  sliderList: SliderList;
+  songList: SongList;
+}
+
+const Recommed: React.FC<IProps> = ({ sliderList, songList }) => {
+  const router = useRouter();
+
   return (
-    <div>
-      <h1>推荐页{name}</h1>
-      {
-        slider.map(item => (
-          <div key={item.id}>{item.linkUrl}</div>
-        ))
-      }
+    <div className={styles.recommend}>
+      <div className={styles.slider}>
+        <Swipe>
+          {
+            sliderList.map(item => (
+              <div key={item.id}>
+                <span
+                  // onClick={() => { router.push(item.linkUrl); }}
+                >
+                  <img src={item.picUrl} alt="" style={{ width: '100%' }} />
+                </span>
+              </div>
+            ))
+          }
+        </Swipe>
+      </div>
+      <div className={styles['recommend-title']}>
+        热门歌单推荐
+      </div>
+      <div className={styles['recommend-list']}>
+        {
+          songList.map(item => (
+            <div className={styles.song} key={item.dissid}>
+              <div className={styles['song-img']}>
+                <img width="60" height="60" src={item.imgurl} alt="" />
+              </div>
+              <div className={styles['song-info']}>
+                <div className={styles['song-name']}>{item.creator.name}</div>
+                <div className={styles['song-desc']}>{item.dissname}</div>
+              </div>
+            </div>
+          ))
+        }
+      </div>
     </div>
   );
 };
 
 export const getStaticProps = wrapper.getStaticProps(
   async ({ store }) => {
-    const res: IRecommedRes = await getRecommendApi();
-    store.dispatch({ type: 'NAME', name: 'pp' });
+    const [sliderListRes, songListRes]
+      = await Promise.all<ISliderListRes, ISongListRes>([getSliderListApi(), getSongListApi()]);
+    console.log(sliderListRes, songListRes);
     return {
-      props: { slider: res.data.slider },
+      props: {
+        sliderList: sliderListRes.data.slider,
+        songList: songListRes.data.list,
+      },
     };
   },
 );
-
-// export async function getStaticProps(): Promise<{props: { slider: Slider }}> {
-//   const res: IRecommedRes = await getRecommendApi<IRecommedRes>();
-//   return {
-//     props: { slider: res.data.slider },
-//   };
-// }
 
 const mapStateToProps = (state: IState) => ({ name: state.name });
 

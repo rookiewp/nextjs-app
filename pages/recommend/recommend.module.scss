@@ -1,0 +1,40 @@
+@use '../../styles/variables.scss' as vs;
+
+.recommend {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  .recommend-title {
+    line-height: 65px;
+    text-align: center;
+    font-size: 14px;
+    color: #ffcd32;
+  }
+ 
+  .recommend-list {
+    flex: 1 1 0;
+    overflow: auto;
+  }
+}
+
+.slider {
+ 
+}
+
+.song {
+  display: flex;
+  padding: 0 20px 20px 20px;
+  font-size: vs.$font-size-medium;
+  .song-img {
+    padding-right: 20px;
+  }
+  .song-name {
+    line-height: 20px;
+    margin-bottom: 10px;
+    color: vs.$color-text
+  }
+  .song-desc {
+    line-height: 20px;
+    color: vs.$color-text-d;
+  }
+}

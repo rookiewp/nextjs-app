@@ -5,4 +5,8 @@
   height: 100%;
   display: flex;
   flex-direction: column;
+  .container-body {
+    flex: 1 1 0;
+    overflow-y: hidden;
+  }
 }

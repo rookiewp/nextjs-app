@@ -8,7 +8,7 @@ const SiteLayout: React.FC<{children: React.ReactNode}> = ({ children }) => {
     <div className={styles.container}>
       <Header />
       <Nav />
-      <div>{children}</div>
+      <div className={styles['container-body']}>{children}</div>
     </div>
   );
 };
