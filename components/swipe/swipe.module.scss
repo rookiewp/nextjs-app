@@ -4,7 +4,30 @@
   .swipe-content {
     display: flex;
   }
-  .swipe-item {
-    
+}
+
+.dots {
+  position: absolute;
+  left: 50%;
+  bottom: 10px;
+  transform: translateX(-50%);
+  display: flex;
+  // background-color: red;
+  .dot-item {
+    width: 6px;
+    height: 6px;
+    border-radius: 3px;
+    background-color: #fff;
+    opacity: 0.3;
+    margin: 0 5px;
+    transition: all 0.5s;
+    position: relative;
+  }
+  .dot-active {
+    opacity: 1;
+    width: 8px;
+    height: 8px;
+    border-radius: 4px;
+    top: -1px
   }
 }

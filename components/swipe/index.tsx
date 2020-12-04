@@ -1,7 +1,7 @@
 import React, {
   useState, useEffect, useRef, useCallback,
 } from 'react';
-// import classnames from 'classnames';
+import classnames from 'classnames';
 import styles from './swipe.module.scss';
 
 interface IProps {
@@ -111,31 +111,51 @@ const Swipe: React.FC<IProps> = (props) => {
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
     >
-      <div
-        className={styles['swipe-content']}
-        style={{
-          width: contentWidh,
-          transform: `translateX(${moveX}px)`,
-          transition,
-        }}
-      >
-        {
-          React.Children.map(children, (child, i) => {
-            return (
-              <div
-                className={styles['swipe-item']}
-                style={{ width: itemWidth }}
-                ref={(input) => {
-                  if (i === 0) firstItemRef.current = input;
-                  if (i === len - 1) lastItemRef.current = input;
-                }}
-              >
-                {child}
-              </div>
-            );
-          })
-        }
-      </div>
+      <>
+        <div
+          className={styles['swipe-content']}
+          style={{
+            width: contentWidh,
+            transform: `translateX(${moveX}px)`,
+            transition,
+          }}
+        >
+          {
+            React.Children.map(children, (child, i) => {
+              return (
+                <div
+                  className={styles['swipe-item']}
+                  style={{ width: itemWidth }}
+                  ref={(input) => {
+                    if (i === 0) firstItemRef.current = input;
+                    if (i === len - 1) lastItemRef.current = input;
+                  }}
+                >
+                  {child}
+                </div>
+              );
+            })
+          }
+        </div>
+        <div className={styles.dots}>
+          {
+            React.Children.map(children, (child, i) => {
+              return (
+                <div
+                  className={classnames(styles['dot-item'], {
+                    [styles['dot-active']]: i === index,
+                  })}
+                />
+              );
+            })
+          }
+          {/* <div className={styles['dot-item']} />
+          <div className={styles['dot-item']} />
+          <div className={styles['dot-item']} />
+          <div className={styles['dot-item']} />
+          <div className={styles['dot-item']} /> */}
+        </div>
+      </>
     </div>
   );
 };
