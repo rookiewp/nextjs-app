@@ -18,12 +18,14 @@ interface IPosiiton {
 
 const defaultTransition = 'transform 0.5s';
 
+let timer: ReturnType<typeof setInterval>;
+
 const Swipe: React.FC<IProps> = (props) => {
   const {
     children,
     style,
-    // autoPlay = true,
-    // duration = 2000,
+    autoPlay = true,
+    duration = 2000,
   } = props;
   const containerRef = useRef<HTMLDivElement | undefined>();
   const firstItemRef = useRef<HTMLDivElement | undefined>();
@@ -48,6 +50,18 @@ const Swipe: React.FC<IProps> = (props) => {
       setItemWidth(containerRef.current.clientWidth);
     }
   }, [children]);
+
+  // 自动轮播
+  useEffect(() => {
+    if (autoPlay) {
+      timer = setInterval(() => {
+        setTransition(defaultTransition);
+        setMovex(-(index + 1) * itemWidth);
+        setIndex(index < len - 1 ? index + 1 : 0);
+      }, duration);
+    }
+    return () => { clearInterval(timer); };
+  }, [itemWidth, index, len, hasMoveFirstItem]);
 
   const handleTouchStart = useCallback((e) => {
     setTransition('');
@@ -82,9 +96,10 @@ const Swipe: React.FC<IProps> = (props) => {
       lastItem.style.transform = `translateX(${-len * itemWidth}px)`;
       setHasMoveLastItem(true);
     }
+
     setPosition({ ...position, ...{ end: touch.clientX } });
     setMovex(-index * itemWidth + touch.clientX - position.start);
-  }, [position, index]);
+  }, [position, index, hasMoveFirstItem, hasMoveLastItem, len]);
 
   const handleTouchEnd = useCallback(() => {
     setTransition(defaultTransition);
@@ -100,7 +115,21 @@ const Swipe: React.FC<IProps> = (props) => {
     } else {
       setMovex(-(Math.max(index, 0)) * itemWidth);
     }
-  }, [position, index, hasMoveFirstItem]);
+  }, [position, index, len]);
+
+  const handleTransitionEnd = useCallback(() => {
+    if (hasMoveFirstItem && index === 0) {
+      setTransition('');
+      setMovex(0);
+      firstItemRef.current.style.transform = '';
+      setHasMoveFirstItem(false);
+    }
+    if (index === len - 1 && !hasMoveFirstItem) {
+      const firstItem = firstItemRef.current;
+      firstItem.style.transform = `translateX(${(index + 1) * itemWidth}px)`;
+      setHasMoveFirstItem(true);
+    }
+  }, [hasMoveFirstItem, index, len, itemWidth]);
 
   return (
     <div
@@ -110,6 +139,7 @@ const Swipe: React.FC<IProps> = (props) => {
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
+      onTransitionEnd={handleTransitionEnd}
     >
       <>
         <div
@@ -149,11 +179,6 @@ const Swipe: React.FC<IProps> = (props) => {
               );
             })
           }
-          {/* <div className={styles['dot-item']} />
-          <div className={styles['dot-item']} />
-          <div className={styles['dot-item']} />
-          <div className={styles['dot-item']} />
-          <div className={styles['dot-item']} /> */}
         </div>
       </>
     </div>
