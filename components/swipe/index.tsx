@@ -30,13 +30,20 @@ const Swipe: React.FC<IProps> = (props) => {
   const containerRef = useRef<HTMLDivElement | undefined>();
   const firstItemRef = useRef<HTMLDivElement | undefined>();
   const lastItemRef = useRef<HTMLDivElement | undefined>();
-
+  // 轮播内容总宽度
   const [contentWidh, setContainerWidth] = useState<number>(0);
-  const [itemWidth, setItemWidth] = useState<number>(0);
+  // 轮播视口宽度
+  const [swipeViewWidth, setSwipeViewWidth] = useState<number>(0);
+  // 轮播项的index
   const [index, setIndex] = useState<number>(0);
+  // 触摸点的开始位置和结束位置
   const [position, setPosition] = useState<IPosiiton>({ start: 0, end: 0 });
+  // 轮播内容偏移距离，也就是translateX值
   const [moveX, setMovex] = useState<number>(0);
+  // 切换过度效果
   const [transition, setTransition] = useState<string>(defaultTransition);
+  // 是否停止自动轮播
+  const [sotpAutoPlay, setStopAutoPlay] = useState<boolean>(false);
   const [hasMoveFirstItem, setHasMoveFirstItem] = useState<boolean>(false);
   const [hasMoveLastItem, setHasMoveLastItem] = useState<boolean>(false);
 
@@ -47,23 +54,31 @@ const Swipe: React.FC<IProps> = (props) => {
     if (containerRef.current && children) {
       const containerWidth = containerRef.current.clientWidth * len;
       setContainerWidth(containerWidth);
-      setItemWidth(containerRef.current.clientWidth);
+      setSwipeViewWidth(containerRef.current.clientWidth);
     }
   }, [children]);
 
   // 自动轮播
   useEffect(() => {
-    if (autoPlay) {
+    if (autoPlay && !sotpAutoPlay) {
+      console.log(index);
       timer = setInterval(() => {
         setTransition(defaultTransition);
-        setMovex(-(index + 1) * itemWidth);
+        setMovex(-(index + 1) * swipeViewWidth);
         setIndex(index < len - 1 ? index + 1 : 0);
       }, duration);
     }
     return () => { clearInterval(timer); };
-  }, [itemWidth, index, len, hasMoveFirstItem]);
+  }, [swipeViewWidth, index, len, hasMoveFirstItem, sotpAutoPlay]);
 
   const handleTouchStart = useCallback((e) => {
+    console.log('start');
+    // 停止自动轮播
+    if (timer) {
+      clearInterval(timer);
+    }
+    setStopAutoPlay(true);
+    // 取消过度效果
     setTransition('');
     const [touch] = e.changedTouches;
     setPosition({ start: touch.clientX, end: touch.clientX });
@@ -73,49 +88,53 @@ const Swipe: React.FC<IProps> = (props) => {
     const [touch] = e.changedTouches;
 
     if (hasMoveFirstItem && index === 0) {
-      setTransition('');
       setMovex(0);
       firstItemRef.current.style.transform = '';
       setHasMoveFirstItem(false);
     }
     if (hasMoveLastItem && index === len - 1) {
-      setTransition('');
-      setMovex(-(len - 1) * itemWidth);
+      setMovex(-(len - 1) * swipeViewWidth);
       lastItemRef.current.style.transform = '';
       setHasMoveLastItem(false);
     }
     // 最后一个，向左滑动
     if (index === len - 1 && touch.clientX < position.start && !hasMoveFirstItem) {
       const firstItem = firstItemRef.current;
-      firstItem.style.transform = `translateX(${(index + 1) * itemWidth}px)`;
+      firstItem.style.transform = `translateX(${(index + 1) * swipeViewWidth}px)`;
       setHasMoveFirstItem(true);
     }
     // 第一个，向右滑动
     if (index === 0 && touch.clientX > position.start && !hasMoveLastItem) {
       const lastItem = lastItemRef.current;
-      lastItem.style.transform = `translateX(${-len * itemWidth}px)`;
+      lastItem.style.transform = `translateX(${-len * swipeViewWidth}px)`;
       setHasMoveLastItem(true);
     }
 
     setPosition({ ...position, ...{ end: touch.clientX } });
-    setMovex(-index * itemWidth + touch.clientX - position.start);
+    setMovex(-index * swipeViewWidth + touch.clientX - position.start);
   }, [position, index, hasMoveFirstItem, hasMoveLastItem, len]);
 
   const handleTouchEnd = useCallback(() => {
+    console.log('end');
+    setStopAutoPlay(false);
     setTransition(defaultTransition);
     setPosition({ start: 0, end: 0 });
-    if (Math.abs(position.end - position.start) > itemWidth / 3) {
+    if (Math.abs(position.end - position.start) > swipeViewWidth / 3) {
       if (position.end < position.start) {
-        setMovex(-(index + 1) * itemWidth);
+        setMovex(-(index + 1) * swipeViewWidth);
         setIndex(index < len - 1 ? index + 1 : 0);
       } else {
-        setMovex(-(index - 1) * itemWidth);
+        setMovex(-(index - 1) * swipeViewWidth);
         setIndex(index === 0 ? len - 1 : index - 1);
       }
     } else {
-      setMovex(-(Math.max(index, 0)) * itemWidth);
+      setMovex(-(Math.max(index, 0)) * swipeViewWidth);
     }
   }, [position, index, len]);
+
+  const handleTouchCancel = useCallback(() => {
+    console.log('cancel');
+  }, []);
 
   const handleTransitionEnd = useCallback(() => {
     if (hasMoveFirstItem && index === 0) {
@@ -126,10 +145,10 @@ const Swipe: React.FC<IProps> = (props) => {
     }
     if (index === len - 1 && !hasMoveFirstItem) {
       const firstItem = firstItemRef.current;
-      firstItem.style.transform = `translateX(${(index + 1) * itemWidth}px)`;
+      firstItem.style.transform = `translateX(${len * swipeViewWidth}px)`;
       setHasMoveFirstItem(true);
     }
-  }, [hasMoveFirstItem, index, len, itemWidth]);
+  }, [hasMoveFirstItem, index, len, swipeViewWidth]);
 
   return (
     <div
@@ -139,6 +158,7 @@ const Swipe: React.FC<IProps> = (props) => {
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
+      onTouchCancel={handleTouchCancel}
       onTransitionEnd={handleTransitionEnd}
     >
       <>
@@ -155,7 +175,7 @@ const Swipe: React.FC<IProps> = (props) => {
               return (
                 <div
                   className={styles['swipe-item']}
-                  style={{ width: itemWidth }}
+                  style={{ width: swipeViewWidth }}
                   ref={(input) => {
                     if (i === 0) firstItemRef.current = input;
                     if (i === len - 1) lastItemRef.current = input;

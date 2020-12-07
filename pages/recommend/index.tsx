@@ -57,7 +57,10 @@ const Recommed: React.FC<IProps> = ({ sliderList, songList }) => {
             sliderList.map(item => (
               <div key={item.id}>
                 <span
-                  // onClick={() => { router.push(item.linkUrl); }}
+                  onClick={() => {
+                    // router.push(item.linkUrl);
+                    console.log('click');
+                  }}
                 >
                   <img src={item.picUrl} alt="" style={{ width: '100%' }} />
                 </span>
@@ -92,7 +95,6 @@ export const getStaticProps = wrapper.getStaticProps(
   async ({ store }) => {
     const [sliderListRes, songListRes]
       = await Promise.all<ISliderListRes, ISongListRes>([getSliderListApi(), getSongListApi()]);
-    console.log(sliderListRes, songListRes);
     return {
       props: {
         sliderList: sliderListRes.data.slider,

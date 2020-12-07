@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Store } from 'redux';
 import 'normalize.css';
 import '../styles/globals.scss';
@@ -12,6 +12,11 @@ interface IProps {
 }
 
 const App: React.FC<IProps> = ({ Component, pageProps }) => {
+  useEffect(() => {
+    // document.body.addEventListener('touchstart', (e) => {
+    //   e.preventDefault();
+    // }, { passive: false });
+  }, []);
   return (
     // <Provider store={pageProps.store}>
     <SiteLayout>
