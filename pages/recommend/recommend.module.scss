@@ -13,12 +13,10 @@
  
   .recommend-list {
     flex: 1 1 0;
-    overflow: auto;
+    overflow: hidden;
+    // overflow: auto;
+    // -webkit-overflow-scrolling: touch
   }
-}
-
-.slider {
- 
 }
 
 .song {

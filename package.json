@@ -3,12 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -H 10.100.44.10 -p 9000",
+    "dev": "next dev -H 10.100.44.20 -p 9000",
     "build": "next build",
     "start": "next start"
   },
   "dependencies": {
     "axios": "^0.21.0",
+    "better-scroll": "^1.15.2",
     "classnames": "^2.2.6",
     "jsonp": "^0.2.1",
     "next": "10.0.3",

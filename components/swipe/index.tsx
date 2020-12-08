@@ -78,12 +78,12 @@ const Swipe: React.FC<IProps> = (props) => {
     setStopAutoPlay(true);
     // 取消过度效果
     setTransition('');
-    const [touch] = e.changedTouches;
+    const [touch] = e.touches;
     setPosition({ start: touch.clientX, end: touch.clientX });
   }, [timer]);
 
   const handleTouchMove = useCallback((e) => {
-    const [touch] = e.changedTouches;
+    const [touch] = e.touches;
 
     // if (hasMoveFirstItem && index === 0) {
     //   setMovex(0);

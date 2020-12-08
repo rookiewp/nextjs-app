@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import { useRouter } from 'next/router';
+import BetterScroll from 'better-scroll';
 import { getSliderListApi, getSongListApi } from './api';
 import { IState } from '../../store/reducer';
 import { wrapper } from '../../store/index';
@@ -49,6 +50,17 @@ interface IProps {
 const Recommed: React.FC<IProps> = ({ sliderList, songList }) => {
   const router = useRouter();
 
+  const wraperRef = useRef<HTMLDivElement | undefined>();
+  const scrollerRef = useRef<HTMLDivElement | undefined>();
+
+  useEffect(() => {
+    if (wraperRef.current && scrollerRef.current) {
+      setTimeout(() => {
+        new BetterScroll(wraperRef.current, {});
+      });
+    }
+  }, [wraperRef.current, scrollerRef.current]);
+
   return (
     <div className={styles.recommend}>
       <div className={styles.slider}>
@@ -57,10 +69,7 @@ const Recommed: React.FC<IProps> = ({ sliderList, songList }) => {
             sliderList.map(item => (
               <div key={item.id}>
                 <span
-                  onClick={() => {
-                    // router.push(item.linkUrl);
-                    console.log('click');
-                  }}
+                  onClick={() => { router.push(item.linkUrl); }}
                 >
                   <img src={item.picUrl} alt="" style={{ width: '100%' }} />
                 </span>
@@ -72,20 +81,22 @@ const Recommed: React.FC<IProps> = ({ sliderList, songList }) => {
       <div className={styles['recommend-title']}>
         热门歌单推荐
       </div>
-      <div className={styles['recommend-list']}>
-        {
-          songList.map(item => (
-            <div className={styles.song} key={item.dissid}>
-              <div className={styles['song-img']}>
-                <img width="60" height="60" src={item.imgurl} alt="" />
+      <div className={styles['recommend-list']} ref={wraperRef}>
+        <div ref={scrollerRef}>
+          {
+            songList.map(item => (
+              <div className={styles.song} key={item.dissid}>
+                <div className={styles['song-img']}>
+                  <img width="60" height="60" src={item.imgurl} alt="" />
+                </div>
+                <div className={styles['song-info']}>
+                  <div className={styles['song-name']}>{item.creator.name}</div>
+                  <div className={styles['song-desc']}>{item.dissname}</div>
+                </div>
               </div>
-              <div className={styles['song-info']}>
-                <div className={styles['song-name']}>{item.creator.name}</div>
-                <div className={styles['song-desc']}>{item.dissname}</div>
-              </div>
-            </div>
-          ))
-        }
+            ))
+          }
+        </div>
       </div>
     </div>
   );
