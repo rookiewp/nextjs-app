@@ -2,10 +2,11 @@ import { AnyAction } from 'redux';
 import { HYDRATE } from 'next-redux-wrapper';
 import * as types from './action-types';
 import { AnyObj } from '../types';
+import { TSingerShort } from '../pages/singer/types';
 
 export interface IState {
   name: string,
-  singer: AnyObj,
+  singer: TSingerShort,
   playing: boolean,
   fullScreen: boolean,
   playlist: AnyObj[],

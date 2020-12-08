@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useRouter } from 'next/router';
 import classnames from 'classnames';
 import styles from './nav.module.scss';
@@ -6,7 +6,7 @@ import styles from './nav.module.scss';
 const navList = [
   {
     title: '推荐',
-    url: '/',
+    url: '/recommend',
   },
   {
     title: '歌手',
@@ -24,23 +24,19 @@ const navList = [
 
 const Nav: React.FC = () => {
   const router = useRouter();
-  const [navIndex, setIndex] = useState<number>(0);
 
   return (
     <div className={styles.nav}>
       {
-        navList.map((item, i) => (
+        navList.map(item => (
           <div
             className={styles['nav-item']}
             key={item.title}
-            onClick={() => {
-              setIndex(i);
-              router.push(item.url);
-            }}
+            onClick={() => { router.push(item.url); }}
           >
             <span
               className={classnames(styles['nav-text'], {
-                [styles['nav-active']]: i === navIndex,
+                [styles['nav-active']]: router.pathname === item.url,
               })}
             >
               {item.title}
