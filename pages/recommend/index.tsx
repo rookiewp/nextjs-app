@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { useRouter } from 'next/router';
 import BetterScroll from 'better-scroll';
@@ -7,6 +7,7 @@ import { IState } from '../../store/reducer';
 import { wrapper } from '../../store/index';
 import styles from './recommend.module.scss';
 import Swipe from '../../components/swipe';
+import BtScroll from '../../components/better-scroll/index';
 
 type SliderList = {id: number, linkUrl: string, picUrl: string}[];
 type SongList = {
@@ -50,17 +51,6 @@ interface IProps {
 const Recommed: React.FC<IProps> = ({ sliderList, songList }) => {
   const router = useRouter();
 
-  const wraperRef = useRef<HTMLDivElement | undefined>();
-  const scrollerRef = useRef<HTMLDivElement | undefined>();
-
-  useEffect(() => {
-    if (wraperRef.current && scrollerRef.current) {
-      setTimeout(() => {
-        new BetterScroll(wraperRef.current, {});
-      });
-    }
-  }, [wraperRef.current, scrollerRef.current]);
-
   return (
     <div className={styles.recommend}>
       <div className={styles.slider}>
@@ -81,23 +71,25 @@ const Recommed: React.FC<IProps> = ({ sliderList, songList }) => {
       <div className={styles['recommend-title']}>
         热门歌单推荐
       </div>
-      <div className={styles['recommend-list']} ref={wraperRef}>
-        <div ref={scrollerRef}>
-          {
-            songList.map(item => (
-              <div className={styles.song} key={item.dissid}>
-                <div className={styles['song-img']}>
-                  <img width="60" height="60" src={item.imgurl} alt="" />
+      <BtScroll>
+        <div className={styles['recommend-list']}>
+          <div>
+            {
+              songList.map(item => (
+                <div className={styles.song} key={item.dissid}>
+                  <div className={styles['song-img']}>
+                    <img width="60" height="60" src={item.imgurl} alt="" />
+                  </div>
+                  <div className={styles['song-info']}>
+                    <div className={styles['song-name']}>{item.creator.name}</div>
+                    <div className={styles['song-desc']}>{item.dissname}</div>
+                  </div>
                 </div>
-                <div className={styles['song-info']}>
-                  <div className={styles['song-name']}>{item.creator.name}</div>
-                  <div className={styles['song-desc']}>{item.dissname}</div>
-                </div>
-              </div>
-            ))
-          }
+              ))
+            }
+          </div>
         </div>
-      </div>
+      </BtScroll>
     </div>
   );
 };

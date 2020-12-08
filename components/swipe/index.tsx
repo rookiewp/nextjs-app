@@ -7,7 +7,7 @@ import styles from './swipe.module.scss';
 interface IProps {
   children: React.ReactNode | (React.ReactNode)[];
   autoPlay?: boolean;
-  duration?: number,
+  duration?: number;
   style?: React.CSSProperties;
 }
 
