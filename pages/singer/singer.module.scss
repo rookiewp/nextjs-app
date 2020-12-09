@@ -13,6 +13,13 @@
     font-size: vs.$font-size-small;
     color: vs.$color-text-l;
     background: vs.$color-highlight-background;
+    // transition: transform ;
+  }
+  .singer-title--fixed {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
   }
   .singer-item {
     display: flex;

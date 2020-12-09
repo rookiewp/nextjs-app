@@ -1,33 +1,48 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import BetterScroll from 'better-scroll';
+
+export interface IPos {
+  x: number,
+  y: number,
+}
 
 interface IProps {
   children: React.ReactNode | (React.ReactNode)[];
   options?: Record<string, unknown>;
-  bs?: {
-    current: null | HTMLDivElement,
+  instance?: {
+    current: any,
   };
+  onScroll?: (pos: IPos) => void;
 }
 
 const BtScroll: React.FC<IProps> = (props) => {
   const {
     children,
-    options,
-    bs,
+    options = {},
+    instance,
+    onScroll,
   } = props;
   const divRef = useRef<HTMLDivElement | undefined>();
+  const [betterScroll, setBetterScroll] = useState(null);
 
   useEffect(() => {
     if (divRef.current) {
       const previous = divRef.current.previousElementSibling;
-      if (previous) {
+      if (previous && !betterScroll) {
         const bts = new BetterScroll(previous, options);
-        if (bs) {
-          bs.current = bts;
-        }
+        setBetterScroll(bts);
+      }
+      if (instance && betterScroll) {
+        instance.current = betterScroll;
+      }
+      if (onScroll && betterScroll) {
+        betterScroll.on('scroll', onScroll);
       }
     }
-  }, [divRef.current]);
+    return () => {
+      if (betterScroll) betterScroll.off('scroll', onScroll);
+    };
+  }, [divRef.current, onScroll, betterScroll]);
   return (
     <>
       {
