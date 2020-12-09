@@ -102,6 +102,20 @@ const Singer: React.FC<IProps> = ({ singerGroup }) => {
         >
           {currentTitle}
         </div>
+        <div className={styles['singer-shortlist']}>
+          {
+            singerGroup.map((group, i) => (
+              <div
+                key={group.title}
+                className={classnames(styles['singer-shortitem'], {
+                  [styles['singer-shortitem--active']]: currentIndex === i,
+                })}
+              >
+                {group.title.slice(0, 1)}
+              </div>
+            ))
+          }
+        </div>
       </div>
     </BtScroll>
   );

@@ -36,4 +36,23 @@
     color: vs.$color-text-l;
     font-size: vs.$font-size-medium;
   }
+  .singer-shortlist {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    padding: 20px 0;
+    border-radius: 10px;
+    text-align: center;
+    background: vs.$color-background-d;
+  }
+  .singer-shortitem{
+    padding: 3px;
+    color: vs.$color-text-l;
+    font-size: vs.$font-size-small;
+  }
+  .singer-shortitem--active {
+    color: vs.$color-theme
+  }
 }
