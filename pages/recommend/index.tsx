@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { useRouter } from 'next/router';
 import BetterScroll from 'better-scroll';
-import { getSliderListApi, getSongListApi } from './api';
+import { getSliderListApi, getSongListApi } from '../../apis/recommend.api';
 import { IState } from '../../store/reducer';
 import { wrapper } from '../../store/index';
 import styles from './recommend.module.scss';

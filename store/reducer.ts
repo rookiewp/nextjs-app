@@ -1,8 +1,8 @@
 import { AnyAction } from 'redux';
 import { HYDRATE } from 'next-redux-wrapper';
 import * as types from './action-types';
-import { AnyObj } from '../types';
-import { TSingerShort } from '../pages/singer/types';
+import { AnyObj } from '../types/common.types';
+import { TSingerShort } from '../types/singer.types';
 
 export interface IState {
   name: string,

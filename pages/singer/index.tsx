@@ -2,10 +2,10 @@ import React, { useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import { useRouter } from 'next/router';
 import BetterScroll from 'better-scroll';
-import { getSingerListApi } from './api';
+import { getSingerListApi } from '../../apis/singer.api';
 import { IState } from '../../store/reducer';
 import { wrapper } from '../../store/index';
-import { TSinger, TSingerGroup, TGroup } from './types';
+import { TSinger, TSingerGroup, TGroup } from '../../types/singer.types';
 import { normalizeSinger } from '../../lib/util';
 import styles from './singer.module.scss';
 

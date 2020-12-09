@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { commonParams } from '../../lib/config';
+import { commonParams } from '../lib/config';
 
 export function getSingerListApi<T>(): Promise<T> {
   const url = 'https://c.y.qq.com/v8/fcg-bin/v8.fcg';

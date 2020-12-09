@@ -1,4 +1,4 @@
-import { TSinger, TSingerGroup } from '../pages/singer/types';
+import { TSinger, TSingerGroup } from '../types/singer.types';
 
 class Singer {
   id: string;
