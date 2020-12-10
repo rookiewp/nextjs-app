@@ -8,7 +8,7 @@ import BtScroll, { IPos } from '../../components/better-scroll';
 import { getSingerListApi } from '../../apis/singer.api';
 import { IState } from '../../store/reducer';
 import { wrapper } from '../../store/index';
-import { TSinger, TSingerGroup, TGroup } from '../../types/singer.types';
+import { TSinger, SingerGroup, Group } from '../../types/singer.types';
 import { IRes } from '../../types/common.types';
 import { normalizeSinger } from '../../lib/util';
 import styles from './singer.module.scss';
@@ -26,7 +26,7 @@ interface ISingerListRes extends IRes {
 }
 
 interface IProps {
-  singerGroup: TSingerGroup;
+  singerGroup: SingerGroup;
 }
 
 const Singer: React.FC<IProps> = ({ singerGroup }) => {
@@ -83,7 +83,7 @@ const Singer: React.FC<IProps> = ({ singerGroup }) => {
       <div className={styles.singer}>
         <div className="scroller">
           {
-            singerGroup.map((group: TGroup) => (
+            singerGroup.map((group: Group) => (
               <div key={group.title} className="singer-group">
                 <div className={styles['singer-title']}>{group.title}</div>
                 <div className={styles['singer-list']}>

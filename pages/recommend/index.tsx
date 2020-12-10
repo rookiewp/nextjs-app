@@ -11,12 +11,23 @@ import { IRes } from '../../types/common.types';
 
 type SliderList = {id: number, linkUrl: string, picUrl: string}[];
 type SongList = {
-  commit_time: string, createtime: string, dissid: string,
-  dissname: string, imgurl: string, introduction: string,
-  listennum: number, score: number, version: number,
+  commit_time: string,
+  createtime: string,
+  dissid: string,
+  dissname: string,
+  imgurl: string,
+  introduction: string,
+  listennum: number,
+  score: number,
+  version: number,
   creator: {
-    avatarUrl: string, encrypt_uin: string, followflag: number,
-    isVip: number, name: string, qq: number, type: number,
+    avatarUrl: string,
+    encrypt_uin: string,
+    followflag: number,
+    isVip: number,
+    name: string,
+    qq: number,
+    type: number,
   }
 }[];
 interface ISliderListRes {
@@ -27,7 +38,7 @@ interface ISliderListRes {
     songList: Record<string, unknown>[]
   }
 }
-interface ISongListRes extends IRes {
+export interface ISongListRes extends IRes {
   data: {
     categoryId: number,
     ein: number,
@@ -36,8 +47,8 @@ interface ISongListRes extends IRes {
     sum: number,
     uin: number,
     list: SongList,
-  },
-  default: number,
+  };
+  default: number;
 }
 
 interface IProps {
@@ -68,12 +79,18 @@ const Recommed: React.FC<IProps> = ({ sliderList, songList }) => {
       <div className={styles['recommend-title']}>
         热门歌单推荐
       </div>
-      <BtScroll>
+      <BtScroll options={{ click: true }}>
         <div className={styles['recommend-list']}>
           <div>
             {
               songList.map(item => (
-                <div className={styles.song} key={item.dissid}>
+                <div
+                  className={styles.song}
+                  key={item.dissid}
+                  onClick={() => {
+                    router.push(`/recommend/${item.dissid}`);
+                  }}
+                >
                   <div className={styles['song-img']}>
                     <img width="60" height="60" src={item.imgurl} alt="" />
                   </div>

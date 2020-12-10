@@ -15,15 +15,15 @@ export type TSinger = {
   voc: string,
 };
 
-export type TSingerShort = {
+export type SingerShort = {
   avatar: string,
   name: string,
   id: string,
 };
 
-export type TGroup = {
+export type Group = {
   title: string;
-  items: TSingerShort[]
+  items: SingerShort[]
 };
 
-export type TSingerGroup = TGroup[];
+export type SingerGroup = Group[];
