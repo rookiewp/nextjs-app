@@ -1,13 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { useRouter } from 'next/router';
-import BetterScroll from 'better-scroll';
 import { getSliderListApi, getSongListApi } from '../../apis/recommend.api';
 import { IState } from '../../store/reducer';
 import { wrapper } from '../../store/index';
 import styles from './recommend.module.scss';
 import Swipe from '../../components/swipe';
 import BtScroll from '../../components/better-scroll/index';
+import { IRes } from '../../types/common.types';
 
 type SliderList = {id: number, linkUrl: string, picUrl: string}[];
 type SongList = {
@@ -27,8 +27,7 @@ interface ISliderListRes {
     songList: Record<string, unknown>[]
   }
 }
-interface ISongListRes {
-  code: number;
+interface ISongListRes extends IRes {
   data: {
     categoryId: number,
     ein: number,
@@ -39,8 +38,6 @@ interface ISongListRes {
     list: SongList,
   },
   default: number,
-  message: string,
-  subcode: number,
 }
 
 interface IProps {

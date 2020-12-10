@@ -1,4 +1,6 @@
-import React, { useEffect, useCallback, useState } from 'react';
+import React, {
+  useEffect, useCallback, useState, useRef,
+} from 'react';
 import { connect } from 'react-redux';
 // import { useRouter } from 'next/router';
 import classnames from 'classnames';
@@ -7,22 +9,20 @@ import { getSingerListApi } from '../../apis/singer.api';
 import { IState } from '../../store/reducer';
 import { wrapper } from '../../store/index';
 import { TSinger, TSingerGroup, TGroup } from '../../types/singer.types';
+import { IRes } from '../../types/common.types';
 import { normalizeSinger } from '../../lib/util';
 import styles from './singer.module.scss';
 
 const TITLE_HEIGHT = 30;
 
 type SingerList = TSinger[];
-interface ISingerListRes {
-  code: number;
+interface ISingerListRes extends IRes {
   data: {
     list: SingerList,
     per_page: number,
     total: number,
     total_page: number,
-  },
-  message: string,
-  subcode: number,
+  };
 }
 
 interface IProps {
@@ -34,6 +34,8 @@ const Singer: React.FC<IProps> = ({ singerGroup }) => {
   const [currentTitle, setTitle] = useState<string>(singerGroup[0].title);
   const [translateY, setTranslateY] = useState<number>(0);
   const [heightList, setHeightList] = useState<number[]>([]);
+
+  const bScrollRef = useRef<any>();
 
   useEffect(() => {
     const domList = document.querySelectorAll('.singer-group');
@@ -73,7 +75,11 @@ const Singer: React.FC<IProps> = ({ singerGroup }) => {
   }, [heightList, currentIndex]);
 
   return (
-    <BtScroll onScroll={handleScroll} options={{ probeType: 3 }}>
+    <BtScroll
+      onScroll={handleScroll}
+      options={{ probeType: 3, click: true }}
+      instance={bScrollRef}
+    >
       <div className={styles.singer}>
         <div className="scroller">
           {
@@ -110,6 +116,11 @@ const Singer: React.FC<IProps> = ({ singerGroup }) => {
                 className={classnames(styles['singer-shortitem'], {
                   [styles['singer-shortitem--active']]: currentIndex === i,
                 })}
+                onClick={() => {
+                  const el = document.querySelectorAll('.singer-group')[i];
+                  bScrollRef.current.scrollToElement(el);
+                  setIndex(i);
+                }}
               >
                 {group.title.slice(0, 1)}
               </div>
